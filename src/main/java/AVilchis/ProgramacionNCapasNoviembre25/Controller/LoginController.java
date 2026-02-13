@@ -46,7 +46,7 @@ public class LoginController {
             Usuario usuarioRespuesta = mapper.convertValue(result.Objects.get(0), Usuario.class);//Metodo para conversión
             sesion.setAttribute("token", result.Object);
             sesion.setAttribute("UsuarioAutenticado", usuarioRespuesta);
-            if(usuarioRespuesta.Rol.getNombre().equals("Administrador")){
+            if(usuarioRespuesta.Rol.getNombre().equals("Ingeniero")){
                 return "redirect:/Usuario";
             
             }else if(usuarioRespuesta.Rol.getNombre().equals("Usuario")){
