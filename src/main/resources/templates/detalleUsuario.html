@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Detalle Usuario</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+    <body class="bg-dark text-light row w-100 h-100" style="overflow-x:hidden">
+        <!-- ================= NAVBAR ================= -->
+        <nav class="navbar navbar-dark bg-black border-bottom border-secondary sticky-top shadow-sm">
+            <div class="ps-4 container-fluid d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center bg-primary px-3 py-2 rounded">
+                    <i class="bi bi-person-fill-gear fs-4 me-2"></i>
+                    <span th:text="${UsuarioAutenticado.rol.nombre}"></span>
+                </div>
+                <a th:href="@{/logout}" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Cerrar sesión
+                </a>
+            </div>
+        </nav>
+        <!-- ================= SECCIÓN USUARIO ================= -->
+        <section class="card bg-dark border-secondary shadow-lg col-12 col-lg-4 mb-3 text-break"
+                 style="align-items: center; height: 99dvh">
+            <div class="card-title text-center fw-bold btn btn-outline-info mt-4"
+                 th:if="${Errores == null}"
+                 th:text="|${Usuario.nombre} ${Usuario.apellidoPaterno} ${Usuario.apellidoMaterno}|">
+            </div>
+            <div class="card-body w-100 px-4">
+                <p th:utext="|<b>Email:</b> ${Usuario.email}|"></p>
+                <p th:utext="|<b>Fecha Nacimiento:</b> ${Usuario.fechaNacimiento}|"></p>
+                <p th:utext="|<b>Rol:</b> ${Usuario.rol.idRol}|"></p>
+                <p th:utext="|<b>Sexo:</b> ${Usuario.sexo}|"></p>
+                <p th:utext="|<b>Telefono:</b> ${Usuario.telefono}|"></p>
+                <p th:utext="|<b>Celular:</b> ${Usuario.celular}|"></p>
+                <p th:utext="|<b>Curp:</b> ${Usuario.curp}|"></p>
+                <button class="btn btn-outline-warning w-100 mb-3"
+                        data-bs-toggle="modal"
+                        data-bs-target="#my-modal">
+                    Editar
+                </button>
+            </div>
+        </section>
+        <!-- ================= SECCIÓN DIRECCIONES ================= -->
+        <section th:if="${Errores == null}"
+                 class="container col-12 col-lg-8"
+                 style="height: 99dvh; display: flex;">
+            <div class="card bg-dark border-secondary shadow-lg w-100">
+                <div class="card-body">
+                    <div class="card-title text-center fw-bold fs-4 text-info mb-4">
+                        DIRECCIONES
+                    </div>
+                    <table class="table table-dark table-hover align-middle"
+                           th:if="|${#lists.size(Usuario.direcciones)>0}|">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Direccion</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="direccion:${Usuario.Direcciones}">
+                                <td th:text="|${direccion.calle} ${direccion.numeroInterior} ${direccion.numeroExterior}|"></td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button class="btn btn-outline-warning"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalDireccion">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger">
+                                            <i class="bi bi-x-square"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-outline-success col-md-4"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalDireccion">
+                        Agregar nueva dirección
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- ================= MODAL USUARIO ================= -->
+        <section class="modal fade" id="my-modal">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content bg-dark text-light border-secondary">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title">Editar usuario</h5>
+                        <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post"
+                              th:object="${Usuario}"
+                              th:action="@{/Usuario/add}"
+                              class="container">
+                            <input type="hidden" th:field="${Usuario.idUsuario}">
+                            <input type="hidden" th:field="${Usuario.estatus}">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Nombres</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{nombre}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Apellido Paterno</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{apellidoPaterno}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Apellido Materno</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{apellidoMaterno}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Correo</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{email}" required>
+                                </div>
+                                <!-- password hidden como lo tenías -->
+                                <input type="hidden" th:field="*{password}">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Telefono</label>
+                                    <input type="number" class="form-control"
+                                           th:field="*{telefono}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Celular</label>
+                                    <input type="number" class="form-control"
+                                           th:field="*{celular}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Sexo</label>
+                                    <div class="d-flex gap-4">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input"
+                                                   value="F"
+                                                   th:field="*{sexo}">
+                                            <label class="form-check-label">Femenino</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input"
+                                                   value="M"
+                                                   th:field="*{sexo}">
+                                            <label class="form-check-label">Masculino</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Fecha Nacimiento</label>
+                                    <input type="date" class="form-control"
+                                           th:field="*{fechaNacimiento}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">CURP</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{curp}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Rol</label>
+                                    <select class="form-select"
+                                            th:field="*{rol.idRol}">
+                                        <option value="0">Elige tu rol</option>
+                                        <option th:each="rol:${Roles}"
+                                                th:value="${rol.idRol}"
+                                                th:text="${rol.nombre}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button type="submit"
+                                        class="btn btn-outline-success col-md-3">
+                                    Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button"
+                                class="btn btn-outline-danger"
+                                data-bs-dismiss="modal">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ================= MODAL DIRECCIÓN ================= -->
+        <section class="modal fade" id="modalDireccion">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content bg-dark text-light border-secondary">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title">DIRECCIÓN</h5>
+                        <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post"
+                              th:object="${Usuario}"
+                              th:action="@{/Usuario/add}"
+                              class="container">
+                            <input type="hidden" th:field="${Usuario.idUsuario}">
+                            <input type="hidden"
+                                   th:field="${Usuario.Direcciones[0].idDireccion}">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Calle</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{direcciones[0].calle}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">No. Interior</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{direcciones[0].numeroInterior}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">No. Exterior</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{direcciones[0].numeroExterior}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">País</label>
+                                    <select class="form-select" id="ddlPais">
+                                        <option value="0">Elige un país</option>
+                                        <option th:each="pais:${Paises}"
+                                                th:value="${pais.idPais}"
+                                                th:text="${pais.nombre}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Estado</label>
+                                    <select class="form-select" id="ddlEstado">
+                                        <option value="0">Selecciona un Estado</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Municipio</label>
+                                    <select class="form-select"
+                                            id="ddlMunicipio"
+                                            th:field="*{direcciones[0].colonia.municipio.idMunicipio}">
+                                        <option value="0">Selecciona un Municipio</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Colonia</label>
+                                    <select class="form-select"
+                                            id="ddlColonia"
+                                            th:field="*{direcciones[0].colonia.idColonia}">
+                                        <option value="0">Selecciona la Colonia</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button type="submit"
+                                        class="btn btn-outline-success col-md-4">
+                                    Guardar Dirección
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button"
+                                class="btn btn-outline-danger"
+                                data-bs-dismiss="modal">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Agregar Usuario</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+
+    <body class="bg-dark">
+
+        <div class="container py-5">
+            <div class="card bg-dark border-secondary shadow-lg rounded-4 text-white">
+                <div class="card-body p-5">
+
+                    <form method="post" th:object="${Usuario}" th:action="@{add}" enctype="multipart/form-data">
+
+                        <input type="hidden" th:field="${Usuario.idUsuario}">
+                        <input type="hidden" th:field="${Usuario.Direcciones[0].idDireccion}">
+                        <input type="hidden" id="estatus" th:field="${Usuario.estatus}">
+
+                        <!-- ================= TITULO ================= -->
+
+                        <div class="text-center mb-5">
+                            <h2 class="fw-bold text-info">
+                                <i class="bi bi-person-plus-fill me-2"></i>
+                                AGREGAR USUARIO
+                            </h2>
+                            <hr class="border-secondary">
+                        </div>
+
+                        <!-- ================= DATOS PERSONALES ================= -->
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Nombres</label>
+                                    <input type="text" class="form-control" th:field="*{nombre}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Apellido Paterno</label>
+                                    <input type="text" class="form-control" th:field="*{apellidoPaterno}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Apellido Materno</label>
+                                    <input type="text" class="form-control" th:field="*{apellidoMaterno}">
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Correo</label>
+                                    <input type="text" class="form-control" th:field="*{email}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Contraseña</label>
+                                    <input type="password" class="form-control" th:field="*{password}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Teléfono</label>
+                                    <input type="number" class="form-control" th:field="*{telefono}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Celular</label>
+                                    <input type="number" class="form-control" th:field="*{celular}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-4">
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Sexo</label>
+                                <div class="d-flex gap-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="F" th:field="*{sexo}">
+                                        <label class="form-check-label text-white">Femenino</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="M" th:field="*{sexo}">
+                                        <label class="form-check-label text-white">Masculino</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Fecha de Nacimiento</label>
+                                <input type="date" class="form-control" th:field="*{fechaNacimiento}">
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">CURP</label>
+                                <input type="text" class="form-control" th:field="*{curp}">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Rol</label>
+                                <select class="form-select" th:field="*{Rol.idRol}">
+                                    <option value="0">Elige tu rol</option>
+                                    <option th:each="rol:${Roles}" th:value="${rol.idRol}" th:text="${rol.nombre}"></option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <hr class="border-secondary my-5">
+
+                        <!-- ================= DIRECCIÓN ================= -->
+
+                        <h4 class="fw-bold text-info mb-4">
+                            <i class="bi bi-geo-alt-fill me-2"></i>
+                            Dirección del Usuario
+                        </h4>
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Calle</label>
+                                    <input type="text" class="form-control" th:field="${Usuario.direcciones[0].calle}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">No. Interior</label>
+                                    <input type="text" class="form-control" th:field="${Usuario.direcciones[0].numeroInterior}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">No. Exterior</label>
+                                    <input type="text" class="form-control" th:field="*{direcciones[0].numeroExterior}">
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">País</label>
+                                    <select class="form-select" id="ddlPais">
+                                        <option value="0">Elige un país</option>
+                                        <option th:each="pais:${Paises}" th:value="${pais.idPais}" th:text="${pais.nombre}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Estado</label>
+                                    <select class="form-select" id="ddlEstado">
+                                        <option value="0">Selecciona un Estado</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Municipio</label>
+                                    <select class="form-select" id="ddlMunicipio" th:field="*{direcciones[0].colonia.municipio.idMunicipio}">
+                                        <option value="0">Selecciona un Municipio</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Colonia</label>
+                                    <select class="form-select" id="ddlColonia" th:field="*{direcciones[0].colonia.idColonia}">
+                                        <option value="0">Selecciona la Colonia</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-grid mt-5">
+                            <button type="submit" class="btn btn-info btn-lg fw-bold">
+                                <i class="bi bi-save-fill me-2"></i>
+                                Guardar Usuario
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+        <script th:inline="javascript">
+            function soloLetras(event, input) {
+
+                let key = event.key;
+                let regExpres = /[a-zA-ZÁÉÍÓÚáéíóú ]+/;
+                let ascci = event.charCode;
+                if (ascci == 32 || ascci >= 65 && ascci <= 90 || ascci >= 97 && ascci <= 122) {
+                    if (regExpres.test(key)) {
+                        $(input).removeClass("invalidText").addClass("correct");
+                        $(input).siblings(".error-message").text("");
+                    }
+
+                } else {
+                    $(input).removeClass("correct").addClass("invalidText");
+                    $(input).siblings(".error-message").text(" Solo se permiten letras");
+                    setTimeout(() => {
+                        $(input).removeClass("invalidText");
+                        $(input).siblings(".error-message").text("");
+                    }, 3000);
+                    event.preventDefault();
+                }
+            }
+
+            function emailValidator(thisInput) {
+                let cadena = $(thisInput).val();
+                const regExpres = /^([A-Z|a-z|0-9](\.|_){0,1})+[A-Z|a-z|0-9]\@([A-Z|a-z|0-9])+((\.){0,1}[A-Z|a-z|0-9]){2}\.[a-z]{2,3}$/;
+                if (regExpres.test(cadena)) {
+                    console.log("Correo valido");
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    $("#emailMessage").text("");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 5000);
+                } else {
+                    $(thisInput).addClass("invalidText");
+                    $("#emailMessage").text("Correo no valido");
+                    console.log("Correo no valido");
+                }
+            }
+
+            function passVal(thisInput) {
+                const regEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+                const inputText = $(thisInput).val();
+                if (regEx.test(inputText) && inputText.length < 50) {
+                    $(thisInput).siblings(".error-message").text("");
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 3700);
+                    console.log("Contraseña valida");
+                } else {
+                    $(thisInput).removeClass("correct").addClass("invalidText");
+                    $(thisInput).siblings(".error-message").text("Contraseña no valida");
+                    console.log("Contraseña no valida");
+                    console.log("Escribe una contraseña más corta");
+                }
+            }
+
+            function validarNumero(thisInput) {
+                const regExp = /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/;
+                const cadena = $(thisInput).val();
+                if (regExp.test(cadena) && cadena.length < 12) {
+                    $(thisInput).siblings(".error-message").text("");
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 3700);
+                } else {
+                    $(thisInput).removeClass("correct").addClass("invalidText");
+                    $(thisInput).siblings(".error-message").text("Numero no valido");
+                }
+            }
+
+            function validarNumeroCalle(thisInput) {
+                const regExp = /^[+-]?(\.\d+|\d+\.|\d+|\d+\.?\d+|\d*\.?\d*[Ee][+-]?\d*)$/;
+                const cadena = $(thisInput).val();
+                if (regExp.test(cadena) && cadena.length < 6 && cadena.length > 0) {
+                    $(thisInput).siblings(".error-message").text("");
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 3700);
+                } else {
+                    $(thisInput).removeClass("correct").addClass("invalidText");
+                    $(thisInput).siblings(".error-message").text("Solo se permiten numeros enteros");
+                }
+            }
+
+            function validarSexo() {
+                const seleccionado = $('input[name = "sexo"]:checked');
+                if (seleccionado.length == 0) {
+                    console.log("Selecciona una opción");
+                }
+            }
+
+            function validarNacimiento(thisInput) {
+                const fecha = $(thisInput).val();
+                const regEx = /([\d]+)([\-\./])([\d]+)([\-\./])([\d]+)|((Jan(|uary)|Feb(|ruary)|Mar(|ch)|Apr(|il)|May|Jun(|e)|Jul(|y)|Aug(|ust)|Sept(|ember)|Oct(|ober)|(Nov|Dec)(|ember))([\s\-])(|([\d]+){1,2}([\s\-]|\, ))([\d]+){4})/;
+                let dia = (new Date().getUTCDate() + 1);
+                let mes = new Date().getUTCMonth() + 1;
+                let fechaMañana = mes + "-" + dia;
+                let fechaNacimiento = fecha.slice(5);
+                if (regEx.test(fecha) && fechaMañana !== fechaNacimiento) {
+                    $(thisInput).siblings(".error-message").text("");
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 3700);
+                } else {
+                    $(thisInput).removeClass("correct").addClass("invalidText");
+                    $(thisInput).siblings(".error-message").text("Fecha no valida");
+                }
+            }
+
+            function validarCurp(thisInput) {
+                const regExp = /[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}/;
+                const texto = $(thisInput).val();
+                if (regExp.test(texto)) {
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    $(thisInput).siblings(".error-message").text("Correcto");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 3700);
+                } else {
+                    $(thisInput).removeClass("correct").addClass("invalidText");
+                    $(thisInput).siblings(".error-message").text("CURP no valida");
+                }
+            }
+
+            function validarRol(thisInput) {
+                const valor = $(thisInput).val();
+                if (valor != 0) {
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 3700);
+                } else {
+                    $(thisInput).removeClass("correct").addClass("invalidText");
+                    $(thisInput).siblings(".error-message").text("rol no valido");
+                    setTimeout(() => {
+                        $(thisInput).siblings(".error-message").text("");
+                    }, 3700);
+                }
+            }
+
+            function validarCalle(thisInput) {
+                const regExp = "/^(?!.*\.\.)(?!*\.$)[^\W][\w.]{0,29}$ /";
+                let cadena = $(thisInput).val();
+                if (regExp.test(cadena)) {
+                    console.log("Calle valida");
+                    $(thisInput).removeClass("invalidText").addClass("correct");
+                    $("#calleMensaje").text("");
+                    setTimeout(() => {
+                        $(thisInput).removeClass("correct");
+                    }, 5000);
+                } else {
+                    $(thisInput).addClass("invalidText");
+                    $("#calleMensaje").text("Calle no valida");
+                    console.log("Correo no valido");
+                }
+            }
+        </script>
+
+    </body>
+</html>
