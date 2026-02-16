@@ -11,21 +11,22 @@
     </head>
 
     <body class="bg-dark text-light">
+    <body class="bg-light">
 
         <div class="container-fluid py-4">
 
             <!-- NAVBAR -->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-black rounded shadow mb-4 px-3">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow-sm mb-4 px-3">
                 <div class="container-fluid d-flex justify-content-between">
 
-                    <div class="d-flex align-items-center bg-primary px-3 py-2 rounded-pill">
+                    <div class="d-flex align-items-center bg-primary text-white px-3 py-2 rounded-pill">
                         <i class="bi bi-person-fill-gear fs-5 me-2"></i>
                         <strong>Administrador</strong>
                     </div>
 
                     <div class="d-flex gap-2">
                         <a th:href="@{/Usuario/detail/{IdUsuario}(IdUsuario=${UsuarioAutenticado.IdUsuario})}" 
-                           class="btn btn-outline-info">
+                           class="btn btn-outline-primary">
                             <i class="bi bi-person-circle me-1"></i>
                             <span th:text="${UsuarioAutenticado.email}"></span>
                         </a>
@@ -39,17 +40,17 @@
             </nav>
 
             <!-- TITULO -->
-            <div class="card bg-secondary bg-opacity-25 border-0 shadow mb-4">
-                <div class="card-body">
-                    <h2 class="fw-bold text-info mb-0">
-                        <i class="bi bi-people-fill me-2"></i> LISTA DE USUARIOS
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body bg-white rounded">
+                    <h2 class="fw-bold text-primary mb-0">
+                        <i class="bi bi-people-fill me-2"></i> Lista de Usuarios
                     </h2>
                 </div>
             </div>
 
             <!-- BUSCADOR -->
-            <div class="card bg-black bg-opacity-50 border-0 shadow mb-4">
-                <div class="card-body">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body bg-white rounded">
                     <div class="row align-items-center g-3">
 
                         <form class="col-12 col-lg-9" method="post" th:object="${UsuarioBusqueda}" th:action="@{/Usuario/Search}">
@@ -66,11 +67,11 @@
                                     <option th:each="rol:${Roles}" th:text="${rol.nombre}" th:value="${rol.idRol}"></option>
                                 </select>
 
-                                <button type="submit" class="btn btn-warning">
+                                <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-search"></i>
                                 </button>
 
-                                <a class="btn btn-secondary" th:href="@{/Usuario}">
+                                <a class="btn btn-outline-secondary" th:href="@{/Usuario}">
                                     <i class="bi bi-arrow-counterclockwise"></i>
                                 </a>
 
@@ -92,12 +93,12 @@
             </div>
 
             <!-- TABLA -->
-            <div class="card bg-black bg-opacity-75 border-0 shadow">
-                <div class="card-body table-responsive">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body table-responsive bg-white rounded">
 
-                    <table class="table table-dark table-hover table-bordered align-middle text-center">
+                    <table class="table table-hover table-bordered align-middle text-center">
 
-                        <thead class="table-primary text-dark">
+                        <thead class="table-light">
                             <tr>
                                 <th>Nombre Completo</th>
                                 <th>Información</th>
@@ -129,7 +130,7 @@
                                     </ul>
                                 </td>
 
-                                <td th:id=|td${usuario.idUsuario}|>
+                                <td>
                                     <div class="d-flex flex-column align-items-center gap-2">
 
                                         <button class="btn btn-outline-danger btn-sm"
@@ -138,7 +139,7 @@
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
 
-                                        <a class="btn btn-outline-info btn-sm"
+                                        <a class="btn btn-outline-primary btn-sm"
                                            th:if="${usuario.estatus}==1"
                                            th:href="@{/Usuario/detail/{idUsuario} (idUsuario=${usuario.idUsuario})}">
                                             <i class="bi bi-pencil-fill"></i>
