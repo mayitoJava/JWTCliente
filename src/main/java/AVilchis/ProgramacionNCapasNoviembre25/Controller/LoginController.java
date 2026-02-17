@@ -20,42 +20,41 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequestMapping("login")
 public class LoginController {
-    
-     @Autowired
+
+    @Autowired
     private RestTemplate restTemplate;
-     
+
     @GetMapping
-    public String cargar(Model model){
+    public String cargar(Model model) {
         model.addAttribute("Usuario", new Usuario());
         return "Login";
     }
-    
 
     @PostMapping
     public String login(@ModelAttribute("Usuario") Usuario usuario, HttpSession sesion, Model model) {
         try {
             ResponseEntity<Result> response = restTemplate.exchange(
-                    "http://localhost:8080/login", 
-                    HttpMethod.POST, 
+                    "http://localhost:8080/login",
+                    HttpMethod.POST,
                     new HttpEntity<>(usuario),
                     new ParameterizedTypeReference<Result>() {
             });
             Result result = response.getBody();
-            
+
             ObjectMapper mapper = new ObjectMapper();//Para convertir el hasMap en un Usuario
             Usuario usuarioRespuesta = mapper.convertValue(result.Objects.get(0), Usuario.class);//Metodo para conversión
             sesion.setAttribute("token", result.Object);
             sesion.setAttribute("UsuarioAutenticado", usuarioRespuesta);
-            if(usuarioRespuesta.Rol.getNombre().equals("Ingeniero")){
+            if (usuarioRespuesta.Rol.getNombre().equals("Ingeniero")) {
                 return "redirect:/Usuario";
-            
-            }else if(usuarioRespuesta.Rol.getNombre().equals("Usuario")){
-                return "redirect:/Usuario/detail/"+usuarioRespuesta.getIdUsuario();
+
+            } else if (usuarioRespuesta.Rol.getNombre().equals("Usuario")) {
+                return "redirect:/Usuario/detail/" + usuarioRespuesta.getIdUsuario();
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return "Login";
         }
-            return "Login";
+        return "Login";
     }
 
 }
